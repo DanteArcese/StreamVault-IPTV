@@ -526,7 +526,7 @@ internal fun StremioCatalogBrowseContent(
 }
 
 @Composable
-private fun catalogLabel(row: StremioCatalogRowState, showAddon: Boolean): String {
+internal fun catalogLabel(row: StremioCatalogRowState, showAddon: Boolean): String {
     val type = if (row.catalog.type !in setOf(StremioMediaType.MOVIE, StremioMediaType.SERIES, StremioMediaType.TV))
         row.catalog.type.typeName else stringResource(
         when (row.catalog.type) {
@@ -596,7 +596,7 @@ private fun GenrePickerDialog(
 }
 
 @Composable
-private fun CatalogMetaCard(
+internal fun CatalogMetaCard(
     meta: StremioMetaPreview,
     focusRequester: FocusRequester,
     onFocused: () -> Unit,
@@ -646,7 +646,7 @@ private fun CatalogMetaCard(
                 )
                 (meta.releaseInfo?.takeIf(String::isNotBlank) ?: label.year)?.let {
                     Text(it, maxLines = 1, overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.labelSmall, color = Color.White.copy(alpha = 0.75f))
+                        style = MaterialTheme.typography.labelSmall, color = Color.White)
                 }
             }
         }

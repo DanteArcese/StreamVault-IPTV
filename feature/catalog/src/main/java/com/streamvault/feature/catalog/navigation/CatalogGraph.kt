@@ -17,6 +17,7 @@ import com.streamvault.feature.catalog.api.CatalogChannelPlaybackContext
 import com.streamvault.feature.catalog.api.CatalogDashboardShelfCustomizationContent
 import com.streamvault.feature.catalog.api.CatalogPlatformHost
 import com.streamvault.feature.catalog.api.CatalogScaffoldContent
+import com.streamvault.feature.catalog.api.CatalogStremioContent
 import com.streamvault.feature.catalog.presentation.dashboard.DashboardScreen
 import com.streamvault.feature.catalog.presentation.movies.MovieDetailScreen
 import com.streamvault.feature.catalog.presentation.movies.MoviesScreen
@@ -44,6 +45,7 @@ fun NavGraphBuilder.registerCatalogGraph(
     consumeMoviePresentationHint: (NavBackStackEntry) -> Unit,
     consumeSeriesPresentationHint: (NavBackStackEntry) -> Unit,
     stremioContent: @androidx.compose.runtime.Composable () -> Boolean = { false },
+    stremioCatalogContent: CatalogStremioContent = CatalogStremioContent(),
     decodeDestination: (String) -> AppDestination? = ::decodeCatalogReturnDestination,
 ) {
     composable(CatalogRoutePatterns.HOME) {
@@ -88,6 +90,7 @@ fun NavGraphBuilder.registerCatalogGraph(
             onMovieClick = { movie -> onOpenMovieDetail(movie, AppDestination.Movies) },
             onContinueWatchingPlay = { history -> onPlayHistory(history, AppDestination.Movies) },
             scaffold = scaffold,
+            stremioShelves = stremioCatalogContent.movieShelves,
         )
     }
 
@@ -102,6 +105,7 @@ fun NavGraphBuilder.registerCatalogGraph(
                 )
             },
             scaffold = scaffold,
+            stremioShelves = stremioCatalogContent.seriesShelves,
         )
     }
 
@@ -138,6 +142,7 @@ fun NavGraphBuilder.registerCatalogGraph(
             onMovieClick = { movie -> onOpenMovieDetail(movie, AppDestination.Search(query)) },
             onSeriesClick = { series -> onOpenSeriesDetail(series, AppDestination.Search(query)) },
             scaffold = scaffold,
+            stremioResults = stremioCatalogContent.searchResults,
         )
     }
 

@@ -477,6 +477,71 @@ class StremioCatalogBrowseViewModelTest {
         extras = extras
     )
 
+    @Test
+    fun `ensureLoaded fetches a shelf once without changing the selected catalog`() = runTest(dispatcher) {
+        val top = StremioCatalogRef(StremioMediaType.MOVIE, "top")
+        val popular = StremioCatalogRef(StremioMediaType.MOVIE, "popular")
+        val repository = CatalogRepositoryFake(top)
+        repository.manifests[1L] = manifest(top).copy(catalogs = listOf(top, popular))
+        repository.fetchResponder = { call -> Result.success(StremioCatalogPage(listOf(preview("item-${repository.calls.size}")))) }
+        val viewModel = StremioCatalogBrowseViewModel(repository, FakeStremioContentAccess(), context = contextWithResourceIds())
+        advanceUntilIdle()
+        val popularKey = StremioCatalogRowKey(1L, popular.settingsKey)
+
+        viewModel.ensureLoaded(popularKey)
+        advanceUntilIdle()
+        viewModel.ensureLoaded(popularKey)
+        advanceUntilIdle()
+
+        assertThat(viewModel.state.value.selectedCatalogKey).isEqualTo(StremioCatalogRowKey(1L, top.settingsKey))
+        assertThat(repository.calls).hasSize(2)
+        assertThat(viewModel.state.value.rows.single { it.key == popularKey }.metas).isNotEmpty()
+    }
+
+    @Test
+    fun `ensureLoaded does not fetch catalogs that need input or when content is hidden`() = runTest(dispatcher) {
+        val top = StremioCatalogRef(StremioMediaType.MOVIE, "top")
+        val search = StremioCatalogRef(StremioMediaType.MOVIE, "search",
+            extras = listOf(StremioCatalogExtraDef("search", isRequired = true)))
+        val repository = CatalogRepositoryFake(top)
+        repository.manifests[1L] = manifest(top).copy(catalogs = listOf(top, search))
+        val access = FakeStremioContentAccess()
+        val viewModel = StremioCatalogBrowseViewModel(repository, access, context = contextWithResourceIds())
+        advanceUntilIdle()
+        val initialCalls = repository.calls.size
+
+        viewModel.ensureLoaded(StremioCatalogRowKey(1L, search.settingsKey))
+        advanceUntilIdle()
+        access.setState(StremioVisibilityState(hidden = true))
+        viewModel.refresh(StremioCatalogRowKey(1L, top.settingsKey))
+        advanceUntilIdle()
+
+        assertThat(repository.calls).hasSize(initialCalls)
+    }
+
+    @Test
+    fun `searchCatalogs sends the global query to each catalog once`() = runTest(dispatcher) {
+        val top = StremioCatalogRef(StremioMediaType.MOVIE, "top", extras = listOf(StremioCatalogExtraDef("search")))
+        val series = StremioCatalogRef(StremioMediaType.SERIES, "series-search",
+            extras = listOf(StremioCatalogExtraDef("search", isRequired = true)))
+        val repository = CatalogRepositoryFake(top)
+        repository.manifests[1L] = manifest(top).copy(catalogs = listOf(top, series))
+        repository.fetchResponder = { call -> Result.success(StremioCatalogPage(listOf(preview("result-${call.query.search}")))) }
+        val viewModel = StremioCatalogBrowseViewModel(repository, FakeStremioContentAccess(), context = contextWithResourceIds())
+        advanceUntilIdle()
+        val keys = listOf(StremioCatalogRowKey(1L, top.settingsKey), StremioCatalogRowKey(1L, series.settingsKey))
+        val before = repository.calls.size
+
+        viewModel.searchCatalogs(keys, "alien")
+        advanceUntilIdle()
+        viewModel.searchCatalogs(keys, "alien")
+        advanceUntilIdle()
+
+        val searches = repository.calls.drop(before)
+        assertThat(searches.map { it.query.search }).containsExactly("alien", "alien")
+        assertThat(viewModel.state.value.rows.map { it.loadedSearch }).containsExactly("alien", "alien")
+    }
+
     private fun contextWithResourceIds(): Context = mock<Context>().also { context ->
         whenever(context.getString(any<Int>())).thenAnswer { invocation ->
             invocation.getArgument<Int>(0).toString()

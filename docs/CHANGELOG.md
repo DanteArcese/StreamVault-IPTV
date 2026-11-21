@@ -2,6 +2,11 @@
 
 All notable product changes are recorded in this document.
 
+## [Unreleased]
+
+### Added
+- Stremio-compatible add-on catalogs now appear outside the Extensions tab: enabled movie and series catalogs show as shelves in the Movies and Series tabs (also when the provider library is empty), and global Search queries every enabled add-on catalog that supports search. Hiding Stremio add-ons hides these too, and catalogs can still be turned off per add-on in Extensions.
+
 ## [1.2.6]
 
 ### Added

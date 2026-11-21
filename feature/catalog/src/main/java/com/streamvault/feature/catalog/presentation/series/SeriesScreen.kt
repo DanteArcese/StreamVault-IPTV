@@ -1,5 +1,6 @@
 ﻿package com.streamvault.feature.catalog.presentation.series
 
+import com.streamvault.feature.catalog.presentation.components.CatalogMessageWithExtras
 import com.streamvault.core.ui.design.BrowseColors
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
@@ -104,6 +105,7 @@ fun SeriesScreen(
     onSeriesIdClick: (Long) -> Unit,
     onFeaturedPlay: (PlaybackHistory) -> Unit = {},
     scaffold: CatalogScaffoldContent,
+    stremioShelves: @Composable () -> Unit = {},
     viewModel: SeriesViewModel = hiltViewModel()
 ) {
     LaunchedEffect(viewModel) {
@@ -202,21 +204,21 @@ fun SeriesScreen(
                 )
             }
         } else if (!uiState.hasProviders) {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CatalogMessageWithExtras(extraContent = stremioShelves) {
                 AppMessageState(
                     title = stringResource(R.string.home_add_first_provider),
                     subtitle = stringResource(R.string.home_add_first_provider_subtitle)
                 )
             }
         } else if (!uiState.hasActiveProvider || (uiState.selectedCategory == null && uiState.seriesByCategory.isEmpty() && uiState.libraryCount == 0 && uiState.searchQuery.isBlank() && !uiState.isLoadingPreviewRows)) {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CatalogMessageWithExtras(extraContent = stremioShelves) {
                 AppMessageState(
                     title = stringResource(R.string.vod_sync_needed_title),
                     subtitle = stringResource(R.string.vod_sync_needed_subtitle)
                 )
             }
         } else if (uiState.selectedCategory == null && uiState.searchQuery.isBlank() && uiState.seriesByCategory.isEmpty() && !uiState.isLoadingPreviewRows) {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CatalogMessageWithExtras(extraContent = stremioShelves) {
                 AppMessageState(
                     title = stringResource(R.string.series_no_found),
                     subtitle = stringResource(R.string.series_no_found_subtitle)
@@ -271,7 +273,8 @@ fun SeriesScreen(
                 onMoveReorderItemUp = viewModel::moveItemUp,
                 onMoveReorderItemDown = viewModel::moveItemDown,
                 onToggleCategoryPinned = viewModel::toggleCategoryPinned,
-                initialFocusRequester = initialContentFocusRequester
+                initialFocusRequester = initialContentFocusRequester,
+                stremioShelves = stremioShelves
             )
         }
         }
@@ -386,7 +389,8 @@ private fun SeriesVodContent(
     onMoveReorderItemUp: (Series) -> Unit,
     onMoveReorderItemDown: (Series) -> Unit,
     onToggleCategoryPinned: (Category) -> Unit,
-    initialFocusRequester: FocusRequester
+    initialFocusRequester: FocusRequester,
+    stremioShelves: @Composable () -> Unit = {}
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     val isTelevisionDevice = rememberIsTelevisionDevice()
@@ -827,6 +831,8 @@ private fun SeriesVodContent(
                 }
             }
             }
+            // App-supplied Stremio add-on catalogs (issue #326); renders nothing when unavailable.
+            item(key = "stremio_shelves") { stremioShelves() }
             items(unpinnedCatEntries, key = { it.key }) { entry ->
                 val categoryName = entry.key
                 val seriesList = entry.value

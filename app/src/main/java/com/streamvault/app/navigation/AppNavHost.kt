@@ -27,6 +27,7 @@ import com.streamvault.feature.catalog.api.CatalogDashboardShelfCustomizationCon
 import com.streamvault.feature.catalog.api.CatalogNavigationChrome
 import com.streamvault.feature.catalog.api.CatalogPlatformHost
 import com.streamvault.feature.catalog.api.CatalogScaffoldContent
+import com.streamvault.feature.catalog.api.CatalogStremioContent
 import com.streamvault.feature.catalog.navigation.registerCatalogGraph
 import com.streamvault.feature.settings.presentation.DashboardShelfCustomizationDialog
 import com.streamvault.domain.model.ContentType
@@ -100,6 +101,25 @@ internal fun AppNavHost(
                 com.streamvault.feature.stremio.presentation.StremioHomeShelf(
                     onOpen = { addonId, history -> navController.navigate(com.streamvault.feature.stremio.navigation.StremioRoutePatterns.historyRoute(addonId, history)) },
                     onDetails = { addonId, preview -> navController.navigate(com.streamvault.feature.stremio.navigation.StremioRoutePatterns.itemRoute(addonId, preview)) })
+            },
+            stremioCatalogContent = run {
+                val openStremioItem: (Long, com.streamvault.domain.model.stremio.StremioMetaPreview) -> Unit = { addonId, preview ->
+                    navController.navigate(com.streamvault.feature.stremio.navigation.StremioRoutePatterns.itemRoute(addonId, preview))
+                }
+                CatalogStremioContent(
+                    movieShelves = {
+                        com.streamvault.feature.stremio.presentation.StremioCatalogShelves(
+                            type = com.streamvault.domain.model.stremio.StremioMediaType.MOVIE, onDetails = openStremioItem)
+                    },
+                    seriesShelves = {
+                        com.streamvault.feature.stremio.presentation.StremioCatalogShelves(
+                            type = com.streamvault.domain.model.stremio.StremioMediaType.SERIES, onDetails = openStremioItem)
+                    },
+                    searchResults = { query, includeMovies, includeSeries ->
+                        com.streamvault.feature.stremio.presentation.StremioSearchResults(
+                            query = query, includeMovies = includeMovies, includeSeries = includeSeries, onDetails = openStremioItem)
+                    },
+                )
             },
             onTopLevelDestinationRequested = onTopLevelDestinationRequested,
             onOpenMovieDetail = catalogDetailActions::openMovieDetail,

@@ -456,6 +456,7 @@ fun SearchScreen(
     onMovieClick: (Movie) -> Unit,
     onSeriesClick: (Series) -> Unit,
     scaffold: CatalogScaffoldContent,
+    stremioResults: @Composable (query: String, includeMovies: Boolean, includeSeries: Boolean) -> Unit = { _, _, _ -> },
     viewModel: SearchViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -918,6 +919,17 @@ fun SearchScreen(
                             }
                         }
                     }
+                }
+            }
+
+            // App-supplied Stremio add-on search results (issue #326); renders nothing when unavailable.
+            if (selectedTab != SearchTab.LIVE) {
+                item(key = "stremio_results") {
+                    stremioResults(
+                        query,
+                        selectedTab == SearchTab.ALL || selectedTab == SearchTab.MOVIES,
+                        selectedTab == SearchTab.ALL || selectedTab == SearchTab.SERIES
+                    )
                 }
             }
         }

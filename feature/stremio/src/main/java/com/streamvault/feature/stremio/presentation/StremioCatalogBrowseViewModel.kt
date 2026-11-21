@@ -311,6 +311,26 @@ class StremioCatalogBrowseViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Loads the first page of [key] without changing the selected catalog. Used by the Movies/Series
+     * tab shelves, which show several catalogs at once.
+     */
+    fun ensureLoaded(key: StremioCatalogRowKey) {
+        val row = _state.value.rows.firstOrNull { it.key == key } ?: return
+        if (row.isLocked || row.selectedGenreLocked || row.blockedReason != null) return
+        if (row.pageCount == 0 && !row.loading && row.error == null && rowCanRequest(row)) {
+            startRequest(key, reset = true, debounceMs = 0L)
+        }
+    }
+
+    /** Applies one global search query to each catalog in [keys] (debounced per catalog). */
+    fun searchCatalogs(keys: Collection<StremioCatalogRowKey>, query: String) {
+        keys.forEach { key ->
+            val row = _state.value.rows.firstOrNull { it.key == key } ?: return@forEach
+            if (row.search != query || (row.loadedSearch != query && !row.loading && row.error == null)) setSearch(key, query)
+        }
+    }
+
     suspend fun verifyParentalPin(pin: String): Boolean = parentalAccess.verifyPin(pin)
 
     fun unlockCatalog(key: StremioCatalogRowKey) {
