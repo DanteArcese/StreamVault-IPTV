@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">برای پخش بایگانی‌ها، FTP و Usenet به یک Stremio Service در حال اجرا متصل شوید.</string>
     <string name="stremio_service_required">Stremio Service را پیکربندی کنید.</string>
     <string name="stremio_service_save">ذخیره</string>
+    <string name="stremio_sync_skipped_items">موارد ردشده از کتابخانه: %1$d. افزونه‌ای را که از آن‌ها پشتیبانی می‌کند نصب کنید و دوباره همگام‌سازی کنید.</string>
+    <string name="stremio_error_library_too_large">کتابخانه Stremio شما برای همگام‌سازی بیش از حد بزرگ است. حداکثر: %1$d.</string>
+    <string name="stremio_error_sign_in_expired">ورود به Stremio منقضی شده است. اتصال را قطع کنید و دوباره وصل شوید.</string>
 </resources>

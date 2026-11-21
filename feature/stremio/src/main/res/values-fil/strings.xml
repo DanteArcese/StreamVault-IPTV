@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">Kumonekta sa tumatakbong Stremio Service para mag-play ng mga archive, FTP at Usenet.</string>
     <string name="stremio_service_required">I-configure ang Stremio Service.</string>
     <string name="stremio_service_save">I-save</string>
+    <string name="stremio_sync_skipped_items">Mga nilaktawang item sa library: %1$d. Mag-install ng add-on na sumusuporta sa mga ito, pagkatapos ay mag-sync ulit.</string>
+    <string name="stremio_error_library_too_large">Masyadong malaki ang iyong Stremio library para i-sync. Maximum: %1$d.</string>
+    <string name="stremio_error_sign_in_expired">Nag-expire ang sign-in sa Stremio. Mag-disconnect, pagkatapos ay kumonekta ulit.</string>
 </resources>

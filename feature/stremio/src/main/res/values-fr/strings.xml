@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">Connectez un Stremio Service en cours d’exécution pour lire les archives, FTP et Usenet.</string>
     <string name="stremio_service_required">Configurez Stremio Service.</string>
     <string name="stremio_service_save">Enregistrer</string>
+    <string name="stremio_sync_skipped_items">Éléments de bibliothèque ignorés : %1$d. Installez un module compatible, puis synchronisez à nouveau.</string>
+    <string name="stremio_error_library_too_large">Votre bibliothèque Stremio est trop volumineuse pour être synchronisée. Maximum : %1$d.</string>
+    <string name="stremio_error_sign_in_expired">La connexion Stremio a expiré. Déconnectez-vous, puis reconnectez-vous.</string>
 </resources>

@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">アーカイブ、FTP、Usenetを再生するには、実行中のStremio Serviceに接続してください。</string>
     <string name="stremio_service_required">Stremio Serviceを設定してください。</string>
     <string name="stremio_service_save">保存</string>
+    <string name="stremio_sync_skipped_items">スキップしたライブラリ項目: %1$d。対応するアドオンをインストールしてから、もう一度同期してください。</string>
+    <string name="stremio_error_library_too_large">Stremio ライブラリが大きすぎるため同期できません。上限: %1$d</string>
+    <string name="stremio_error_sign_in_expired">Stremio のサインインの有効期限が切れました。接続を解除してから、もう一度接続してください。</string>
 </resources>

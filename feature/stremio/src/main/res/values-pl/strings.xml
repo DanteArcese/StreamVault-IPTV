@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">Połącz działającą usługę Stremio Service, aby odtwarzać archiwa, FTP i Usenet.</string>
     <string name="stremio_service_required">Skonfiguruj Stremio Service.</string>
     <string name="stremio_service_save">Zapisz</string>
+    <string name="stremio_sync_skipped_items">Pominięte elementy biblioteki: %1$d. Zainstaluj dodatek, który je obsługuje, i zsynchronizuj ponownie.</string>
+    <string name="stremio_error_library_too_large">Twoja biblioteka Stremio jest zbyt duża, aby ją zsynchronizować. Maksimum: %1$d.</string>
+    <string name="stremio_error_sign_in_expired">Logowanie do Stremio wygasło. Rozłącz się, a następnie połącz ponownie.</string>
 </resources>

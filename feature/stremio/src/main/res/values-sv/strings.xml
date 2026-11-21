@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">Anslut en körande Stremio Service för att spela upp arkiv, FTP och Usenet.</string>
     <string name="stremio_service_required">Konfigurera Stremio Service.</string>
     <string name="stremio_service_save">Spara</string>
+    <string name="stremio_sync_skipped_items">Överhoppade biblioteksobjekt: %1$d. Installera ett tillägg som stöder dem och synkronisera igen.</string>
+    <string name="stremio_error_library_too_large">Ditt Stremio-bibliotek är för stort för att synkroniseras. Max: %1$d.</string>
+    <string name="stremio_error_sign_in_expired">Stremio-inloggningen har gått ut. Koppla från och anslut igen.</string>
 </resources>

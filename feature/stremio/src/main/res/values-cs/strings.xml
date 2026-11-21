@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">Připojte spuštěnou službu Stremio Service pro přehrávání archivů, FTP a Usenetu.</string>
     <string name="stremio_service_required">Nastavte Stremio Service.</string>
     <string name="stremio_service_save">Uložit</string>
+    <string name="stremio_sync_skipped_items">Přeskočené položky knihovny: %1$d. Nainstalujte doplněk, který je podporuje, a synchronizujte znovu.</string>
+    <string name="stremio_error_library_too_large">Vaše knihovna Stremio je příliš velká na synchronizaci. Maximum: %1$d.</string>
+    <string name="stremio_error_sign_in_expired">Přihlášení ke Stremio vypršelo. Odpojte se a znovu se připojte.</string>
 </resources>

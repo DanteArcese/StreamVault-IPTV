@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">Lidhni një Stremio Service në punë për të luajtur arkiva, FTP dhe Usenet.</string>
     <string name="stremio_service_required">Konfiguroni Stremio Service.</string>
     <string name="stremio_service_save">Ruaj</string>
+    <string name="stremio_sync_skipped_items">Artikuj të bibliotekës të anashkaluar: %1$d. Instaloni një shtesë që i mbështet dhe sinkronizoni përsëri.</string>
+    <string name="stremio_error_library_too_large">Biblioteka juaj Stremio është shumë e madhe për t’u sinkronizuar. Maksimumi: %1$d.</string>
+    <string name="stremio_error_sign_in_expired">Hyrja në Stremio ka skaduar. Shkëputuni dhe lidhuni përsëri.</string>
 </resources>

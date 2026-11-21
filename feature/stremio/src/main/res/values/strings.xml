@@ -156,4 +156,7 @@
     <string name="stremio_streaming_service_description">Connect a running Stremio Service to play archives, FTP and Usenet.</string>
     <string name="stremio_service_required">Configure Stremio Service.</string>
     <string name="stremio_service_save">Save</string>
+    <string name="stremio_sync_skipped_items">Library items skipped: %1$d. Install an add-on that supports them, then sync again.</string>
+    <string name="stremio_error_library_too_large">Your Stremio library is too large to sync. Maximum: %1$d.</string>
+    <string name="stremio_error_sign_in_expired">Stremio sign-in expired. Disconnect, then connect again.</string>
 </resources>

@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">اتصل بخدمة Stremio Service قيد التشغيل لتشغيل الأرشيفات وFTP وUsenet.</string>
     <string name="stremio_service_required">اضبط Stremio Service.</string>
     <string name="stremio_service_save">حفظ</string>
+    <string name="stremio_sync_skipped_items">عناصر المكتبة التي تم تخطيها: %1$d. ثبّت إضافة تدعمها، ثم زامن مرة أخرى.</string>
+    <string name="stremio_error_library_too_large">مكتبة Stremio لديك كبيرة جدًا للمزامنة. الحد الأقصى: %1$d.</string>
+    <string name="stremio_error_sign_in_expired">انتهت صلاحية تسجيل الدخول إلى Stremio. افصل الحساب ثم اتصل مرة أخرى.</string>
 </resources>

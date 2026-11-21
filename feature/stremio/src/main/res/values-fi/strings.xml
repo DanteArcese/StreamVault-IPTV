@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">Yhdistä käynnissä oleva Stremio Service toistaaksesi pakkausarkistoja, FTP:tä ja Usenetia.</string>
     <string name="stremio_service_required">Määritä Stremio Service.</string>
     <string name="stremio_service_save">Tallenna</string>
+    <string name="stremio_sync_skipped_items">Ohitetut kirjaston kohteet: %1$d. Asenna lisäosa, joka tukee niitä, ja synkronoi uudelleen.</string>
+    <string name="stremio_error_library_too_large">Stremio-kirjastosi on liian suuri synkronoitavaksi. Enintään: %1$d.</string>
+    <string name="stremio_error_sign_in_expired">Stremio-kirjautuminen on vanhentunut. Katkaise yhteys ja yhdistä uudelleen.</string>
 </resources>

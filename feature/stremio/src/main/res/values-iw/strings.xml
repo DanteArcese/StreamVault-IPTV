@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">יש להתחבר לשירות Stremio Service פעיל כדי לנגן ארכיונים, FTP ו־Usenet.</string>
     <string name="stremio_service_required">יש להגדיר את Stremio Service.</string>
     <string name="stremio_service_save">שמור</string>
+    <string name="stremio_sync_skipped_items">פריטי ספרייה שדולגו: %1$d. התקינו תוסף שתומך בהם ואז סנכרנו שוב.</string>
+    <string name="stremio_error_library_too_large">ספריית Stremio שלך גדולה מדי לסנכרון. מקסימום: %1$d.</string>
+    <string name="stremio_error_sign_in_expired">תוקף ההתחברות ל-Stremio פג. התנתקו ואז התחברו שוב.</string>
 </resources>

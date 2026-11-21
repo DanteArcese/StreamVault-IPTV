@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">Подключите работающий Stremio Service для воспроизведения архивов, FTP и Usenet.</string>
     <string name="stremio_service_required">Настройте Stremio Service.</string>
     <string name="stremio_service_save">Сохранить</string>
+    <string name="stremio_sync_skipped_items">Пропущено элементов библиотеки: %1$d. Установите дополнение, которое их поддерживает, и синхронизируйте снова.</string>
+    <string name="stremio_error_library_too_large">Ваша библиотека Stremio слишком велика для синхронизации. Максимум: %1$d.</string>
+    <string name="stremio_error_sign_in_expired">Срок входа в Stremio истёк. Отключитесь и подключитесь снова.</string>
 </resources>
