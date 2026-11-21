@@ -2,6 +2,12 @@
 
 All notable product changes are recorded in this document.
 
+## [Unreleased]
+
+### Fixed
+- Stremio account sync no longer fails as a whole when some cloud library items (for example `tmdb:` or URL IDs) have no installed add-on that can describe them. Those items are skipped and retried on the next sync. The account screen shows how many were skipped, and add-on manifests are read once per sync instead of once per item.
+- Stremio account sync now reports an expired session and a library over the 5,000-item limit with their own messages instead of a generic error, and the sync log names the stage that failed.
+
 ## [1.2.6]
 
 ### Added

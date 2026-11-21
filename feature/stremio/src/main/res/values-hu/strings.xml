@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">Csatlakozzon egy futó Stremio Service szolgáltatáshoz az archívumok, FTP és Usenet lejátszásához.</string>
     <string name="stremio_service_required">Állítsa be a Stremio Service szolgáltatást.</string>
     <string name="stremio_service_save">Mentés</string>
+    <string name="stremio_sync_skipped_items">Kihagyott könyvtárelemek: %1$d. Telepíts egy őket támogató bővítményt, majd szinkronizálj újra.</string>
+    <string name="stremio_error_library_too_large">A Stremio-könyvtárad túl nagy a szinkronizáláshoz. Legfeljebb: %1$d.</string>
+    <string name="stremio_error_sign_in_expired">A Stremio-bejelentkezés lejárt. Bontsd a kapcsolatot, majd csatlakozz újra.</string>
 </resources>

@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">Συνδέστε μια ενεργή υπηρεσία Stremio Service για αναπαραγωγή αρχείων συμπίεσης, FTP και Usenet.</string>
     <string name="stremio_service_required">Ρυθμίστε το Stremio Service.</string>
     <string name="stremio_service_save">Αποθήκευση</string>
+    <string name="stremio_sync_skipped_items">Στοιχεία βιβλιοθήκης που παραλείφθηκαν: %1$d. Εγκαταστήστε ένα πρόσθετο που τα υποστηρίζει και συγχρονίστε ξανά.</string>
+    <string name="stremio_error_library_too_large">Η βιβλιοθήκη σας στο Stremio είναι πολύ μεγάλη για συγχρονισμό. Μέγιστο: %1$d.</string>
+    <string name="stremio_error_sign_in_expired">Η σύνδεση στο Stremio έληξε. Αποσυνδεθείτε και συνδεθείτε ξανά.</string>
 </resources>

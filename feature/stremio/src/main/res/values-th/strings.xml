@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">เชื่อมต่อ Stremio Service ที่กำลังทำงานเพื่อเล่นไฟล์เก็บถาวร FTP และ Usenet</string>
     <string name="stremio_service_required">กำหนดค่า Stremio Service</string>
     <string name="stremio_service_save">บันทึก</string>
+    <string name="stremio_sync_skipped_items">รายการในคลังที่ข้าม: %1$d ติดตั้งส่วนเสริมที่รองรับ แล้วซิงค์อีกครั้ง</string>
+    <string name="stremio_error_library_too_large">คลัง Stremio ของคุณใหญ่เกินกว่าจะซิงค์ได้ สูงสุด: %1$d</string>
+    <string name="stremio_error_sign_in_expired">การลงชื่อเข้าใช้ Stremio หมดอายุแล้ว ยกเลิกการเชื่อมต่อ แล้วเชื่อมต่ออีกครั้ง</string>
 </resources>

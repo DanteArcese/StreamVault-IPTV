@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">संग्रह, FTP और Usenet चलाने के लिए चालू Stremio Service से कनेक्ट करें।</string>
     <string name="stremio_service_required">Stremio Service कॉन्फ़िगर करें।</string>
     <string name="stremio_service_save">सहेजें</string>
+    <string name="stremio_sync_skipped_items">छोड़े गए लाइब्रेरी आइटम: %1$d. इन्हें सपोर्ट करने वाला ऐड-ऑन इंस्टॉल करें, फिर दोबारा सिंक करें।</string>
+    <string name="stremio_error_library_too_large">आपकी Stremio लाइब्रेरी सिंक करने के लिए बहुत बड़ी है। अधिकतम: %1$d.</string>
+    <string name="stremio_error_sign_in_expired">Stremio साइन-इन की अवधि समाप्त हो गई। डिस्कनेक्ट करें, फिर दोबारा कनेक्ट करें।</string>
 </resources>

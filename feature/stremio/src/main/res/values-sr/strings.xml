@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">Повежите покренути Stremio Service за репродукцију архива, FTP-а и Usenet-а.</string>
     <string name="stremio_service_required">Подесите Stremio Service.</string>
     <string name="stremio_service_save">Сачувај</string>
+    <string name="stremio_sync_skipped_items">Прескочене ставке библиотеке: %1$d. Инсталирајте додатак који их подржава, па поново синхронизујте.</string>
+    <string name="stremio_error_library_too_large">Ваша Stremio библиотека је превелика за синхронизацију. Највише: %1$d.</string>
+    <string name="stremio_error_sign_in_expired">Пријава на Stremio је истекла. Прекините везу, па се поново повежите.</string>
 </resources>

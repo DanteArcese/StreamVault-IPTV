@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">Collega uno Stremio Service in esecuzione per riprodurre archivi, FTP e Usenet.</string>
     <string name="stremio_service_required">Configura Stremio Service.</string>
     <string name="stremio_service_save">Salva</string>
+    <string name="stremio_sync_skipped_items">Elementi della libreria saltati: %1$d. Installa un componente aggiuntivo che li supporti, poi sincronizza di nuovo.</string>
+    <string name="stremio_error_library_too_large">La tua libreria Stremio è troppo grande per essere sincronizzata. Massimo: %1$d.</string>
+    <string name="stremio_error_sign_in_expired">L’accesso a Stremio è scaduto. Disconnetti, poi connetti di nuovo.</string>
 </resources>

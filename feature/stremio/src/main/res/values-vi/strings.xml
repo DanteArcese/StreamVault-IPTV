@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">Kết nối Stremio Service đang chạy để phát tệp lưu trữ, FTP và Usenet.</string>
     <string name="stremio_service_required">Cấu hình Stremio Service.</string>
     <string name="stremio_service_save">Lưu</string>
+    <string name="stremio_sync_skipped_items">Mục thư viện đã bỏ qua: %1$d. Hãy cài tiện ích hỗ trợ chúng, rồi đồng bộ lại.</string>
+    <string name="stremio_error_library_too_large">Thư viện Stremio của bạn quá lớn để đồng bộ. Tối đa: %1$d.</string>
+    <string name="stremio_error_sign_in_expired">Phiên đăng nhập Stremio đã hết hạn. Hãy ngắt kết nối rồi kết nối lại.</string>
 </resources>

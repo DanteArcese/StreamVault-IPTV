@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">Arşivleri, FTP ve Usenet akışlarını oynatmak için çalışan bir Stremio Service bağlayın.</string>
     <string name="stremio_service_required">Stremio Service yapılandırın.</string>
     <string name="stremio_service_save">Kaydet</string>
+    <string name="stremio_sync_skipped_items">Atlanan kitaplık öğeleri: %1$d. Bunları destekleyen bir eklenti yükleyin, ardından yeniden eşitleyin.</string>
+    <string name="stremio_error_library_too_large">Stremio kitaplığınız eşitlenemeyecek kadar büyük. En fazla: %1$d.</string>
+    <string name="stremio_error_sign_in_expired">Stremio oturumunun süresi doldu. Bağlantıyı kesin, ardından yeniden bağlanın.</string>
 </resources>

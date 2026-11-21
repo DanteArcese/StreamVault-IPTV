@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">Tilslut en kørende Stremio Service for at afspille arkiver, FTP og Usenet.</string>
     <string name="stremio_service_required">Konfigurer Stremio Service.</string>
     <string name="stremio_service_save">Gem</string>
+    <string name="stremio_sync_skipped_items">Sprungne biblioteksemner: %1$d. Installer en tilføjelse, der understøtter dem, og synkroniser igen.</string>
+    <string name="stremio_error_library_too_large">Dit Stremio-bibliotek er for stort til at synkronisere. Maksimum: %1$d.</string>
+    <string name="stremio_error_sign_in_expired">Stremio-login er udløbet. Afbryd forbindelsen, og opret forbindelse igen.</string>
 </resources>

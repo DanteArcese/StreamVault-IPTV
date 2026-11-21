@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">압축 파일, FTP 및 Usenet을 재생하려면 실행 중인 Stremio Service에 연결하세요.</string>
     <string name="stremio_service_required">Stremio Service를 설정하세요.</string>
     <string name="stremio_service_save">저장</string>
+    <string name="stremio_sync_skipped_items">건너뛴 라이브러리 항목: %1$d. 이를 지원하는 애드온을 설치한 후 다시 동기화하세요.</string>
+    <string name="stremio_error_library_too_large">Stremio 라이브러리가 너무 커서 동기화할 수 없습니다. 최대: %1$d</string>
+    <string name="stremio_error_sign_in_expired">Stremio 로그인이 만료되었습니다. 연결을 해제한 후 다시 연결하세요.</string>
 </resources>

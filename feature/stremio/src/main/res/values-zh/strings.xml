@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">连接正在运行的 Stremio Service 以播放压缩文件、FTP 和 Usenet。</string>
     <string name="stremio_service_required">请配置 Stremio Service。</string>
     <string name="stremio_service_save">保存</string>
+    <string name="stremio_sync_skipped_items">已跳过的媒体库项目：%1$d。请安装支持这些项目的插件，然后重新同步。</string>
+    <string name="stremio_error_library_too_large">你的 Stremio 媒体库过大，无法同步。上限：%1$d。</string>
+    <string name="stremio_error_sign_in_expired">Stremio 登录已过期。请断开连接，然后重新连接。</string>
 </resources>

@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">Conecta un Stremio Service en ejecución para reproducir archivos comprimidos, FTP y Usenet.</string>
     <string name="stremio_service_required">Configura Stremio Service.</string>
     <string name="stremio_service_save">Guardar</string>
+    <string name="stremio_sync_skipped_items">Elementos de la biblioteca omitidos: %1$d. Instala un complemento compatible con ellos y vuelve a sincronizar.</string>
+    <string name="stremio_error_library_too_large">Tu biblioteca de Stremio es demasiado grande para sincronizarla. Máximo: %1$d.</string>
+    <string name="stremio_error_sign_in_expired">La sesión de Stremio caducó. Desconecta y vuelve a conectar.</string>
 </resources>

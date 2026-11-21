@@ -18,6 +18,13 @@ import kotlinx.coroutines.sync.withLock
 private class StremioSyncPrivacyException : Exception()
 private class MissingMetadataAddonException : Exception()
 private class StremioSyncTimeoutException : Exception()
+private class StremioLibraryTooLargeException : Exception()
+/** Installed metadata providers, read once per sync instead of once per imported item. */
+private class ImportProviders(val installed: List<StremioAddon>, private val manifest: suspend (Long) -> StremioManifest?) {
+    private val manifests=HashMap<Long, StremioManifest?>()
+    suspend fun manifest(addon: StremioAddon): StremioManifest? =
+        if (manifests.containsKey(addon.id)) manifests[addon.id] else manifest(addon.id).also { manifests[addon.id]=it }
+}
 /** One account session; cloud metadata remains intact when a client does not understand a field. */
 class StremioAccountService(
     private val api: StremioAccountApi,
@@ -36,6 +43,7 @@ class StremioAccountService(
     private var syncJob: Job? = null
     private var session = JsonObject()
     private var loaded = false
+    private var stage = "idle"
 
     override fun start() {
         if (!started.compareAndSet(false,true)) return
@@ -132,25 +140,35 @@ class StremioAccountService(
                 withTimeoutOrNull(4*60_000L) { synchronize(token); true } ?: throw StremioSyncTimeoutException()
                 publish(); true
             } catch (timeout: StremioSyncTimeoutException) {
-                logger.warning("Stremio sync timed out")
+                logger.warning("Stremio sync timed out during $stage")
                 mutableState.update { it.copy(busy=false,error=StremioAccountError.SYNC) }
                 false
             } catch (cancel: CancellationException) { mutableState.update { it.copy(busy=false) }; throw cancel
             } catch (error: Exception) {
-                logger.warning("Stremio sync failed: ${error.javaClass.simpleName}")
+                logger.warning("Stremio sync failed during $stage: ${error.javaClass.simpleName}")
                 val invalid=(error as? StremioAccountApiException)?.authentication==true
                 val privacy=error is StremioSyncPrivacyException
-                mutableState.update { it.copy(busy=false,error=when { privacy -> StremioAccountError.INCOGNITO; invalid -> StremioAccountError.SIGN_IN; else -> StremioAccountError.SYNC }) }
+                val tooLarge=error is StremioLibraryTooLargeException
+                mutableState.update { it.copy(busy=false,error=when {
+                    privacy -> StremioAccountError.INCOGNITO
+                    invalid -> StremioAccountError.SESSION_EXPIRED
+                    tooLarge -> StremioAccountError.LIBRARY_TOO_LARGE
+                    else -> StremioAccountError.SYNC
+                }) }
                 privacy
-            } finally { syncJob=null }
+            } finally { syncJob=null; stage="idle" }
         }
     }
 
     private suspend fun synchronize(token: String) {
+        stage="add-on collection"
         logger.info("Stremio sync: fetching add-on collection")
         val collection=api.call("addonCollectionGet",jsonObject("type" to "AddonCollectionGet","authKey" to token,"update" to false)).asJsonObject
         val installed=addons.observeAddons().first().map { it.installUrl }.toSet()
+        // Failures that must be retried and reported. Items no add-on can resolve are skipped instead:
+        // they stay pending for a later sync and do not make the whole sync fail.
         var unavailableAddon=false
+        var skipped=0
         collection.getAsJsonArray("addons")?.take(200)?.forEach { descriptor ->
             val item=descriptor.takeIf { it.isJsonObject }?.asJsonObject ?: return@forEach
             val url=item.text("transportUrl")?.let { com.streamvault.data.remote.stremio.StremioAddonUrl.parse(it)?.manifestUrl } ?: return@forEach
@@ -158,9 +176,14 @@ class StremioAccountService(
                 if (addons.installAddon(url).isError) unavailableAddon=true
             }
         }
+        stage="library download"
         logger.info("Stremio sync: fetching library")
         val remoteArray=api.call("datastoreGet",jsonObject("type" to "DatastoreGet","authKey" to token,"collection" to "libraryItem","ids" to JsonArray(),"all" to true)).asJsonArray
-        require(remoteArray.size()<=5000)
+        if (remoteArray.size()>StremioAccountLimits.MAX_LIBRARY_ITEMS) {
+            logger.warning("Stremio library has ${remoteArray.size()} items; limit is ${StremioAccountLimits.MAX_LIBRARY_ITEMS}")
+            throw StremioLibraryTooLargeException()
+        }
+        stage="library compare"
         val remote=remoteArray.mapNotNull { it.takeIf { it.isJsonObject }?.asJsonObject }
             .filter { !it.text("_id").isNullOrBlank() }.associateBy { it.text("_id")!! }
         val local=localItems()
@@ -181,6 +204,7 @@ class StremioAccountService(
             localWins+=id
         }
         // Keep unknown fields, watched bits and tombstones in the remote shadow, not an abbreviated DTO.
+        stage="library upload"
         logger.info("Stremio sync: uploading local changes")
         for (batch in outgoing.chunked(100)) {
             if (!allowed()) throw StremioSyncPrivacyException()
@@ -193,14 +217,20 @@ class StremioAccountService(
         if(incoming.isNotEmpty()) store.write(session)
         // Keep pending IDs marked until their imported signatures have been checkpointed.
         // Rebuilding the complete local map per item makes a first sync quadratic.
+        stage="library import"
         logger.info("Stremio sync: importing library")
+        val providers=ImportProviders(addons.observeAddons().first().filter { it.enabled }) { addons.getManifest(it) }
         for (batch in incoming.chunked(100)) {
             val completed=mutableListOf<Map.Entry<String, JsonObject>>()
             for (entry in batch) {
                 try {
-                    import(entry.value)
+                    import(entry.value,providers)
                     completed += entry
                 } catch(cancel:CancellationException) { throw cancel
+                } catch(_:MissingMetadataAddonException) {
+                    // Typically a tmdb:/custom ID with no installed add-on able to describe it.
+                    // It stays in "importing" so a later sync imports it once such an add-on exists.
+                    skipped++
                 } catch(error:Exception) {
                     logger.warning("Stremio library import failed: ${error.javaClass.simpleName}")
                     unavailableAddon=true
@@ -222,6 +252,8 @@ class StremioAccountService(
         }
         session.add("remote",shadow)
         session.add("baseline",signatures(localItems().mapValues { it.value.signature() }))
+        session.addProperty("skippedItems",skipped)
+        if(skipped>0) logger.info("Stremio sync: skipped $skipped library items without a metadata add-on")
         if(unavailableAddon) {
             store.write(session)
             error("Account addon unavailable")
@@ -299,16 +331,16 @@ class StremioAccountService(
         return output
     }
 
-    private suspend fun import(item: JsonObject) {
+    private suspend fun import(item: JsonObject, providers: ImportProviders) {
         val id=item.text("_id") ?: return
         val type=StremioMediaType.fromTypeName(item.text("type"))
         if(type==StremioMediaType.TV || type==StremioMediaType.UNKNOWN) return
-        val installed=addons.observeAddons().first().filter { it.enabled }
+        val installed=providers.installed
         val origins=session.getAsJsonObject("origins") ?: JsonObject().also { session.add("origins",it) }
         var addon=installed.firstOrNull { it.installFingerprint()==origins.text(id) }
         if(addon==null) {
             val candidates=installed.filter { candidate ->
-                addons.getManifest(candidate.id)?.supportsResource(StremioResourceKind.META,type,id)==true
+                providers.manifest(candidate)?.supportsResource(StremioResourceKind.META,type,id)==true
             }
             // Cloud library IDs have no provider namespace. Only IMDb IDs can safely
             // select among multiple metadata providers without an established origin.
@@ -351,7 +383,8 @@ class StremioAccountService(
     private fun signatures(values: Map<String,String>)=JsonObject().apply { values.toSortedMap().forEach { (k,v) -> addProperty(k,v) } }
     private fun publish(error: StremioAccountError?=null) {
         mutableState.value=StremioAccountState(ready=true,connected=session.text("authKey")!=null,
-            displayName=session.text("displayName"),linkUrl=session.text("link"),linkCode=session.text("code"),lastSyncAt=session.number("lastSyncAt"),error=error)
+            displayName=session.text("displayName"),linkUrl=session.text("link"),linkCode=session.text("code"),lastSyncAt=session.number("lastSyncAt"),
+            skippedItems=session.number("skippedItems").toInt(),error=error)
     }
     private fun String?.instantMs(): Long? = this?.let { value -> runCatching { Instant.parse(value).toEpochMilli() }.getOrNull()
         ?: runCatching { java.time.OffsetDateTime.parse(value).toInstant().toEpochMilli() }.getOrNull() }

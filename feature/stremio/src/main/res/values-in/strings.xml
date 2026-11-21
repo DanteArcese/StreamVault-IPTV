@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">Hubungkan Stremio Service yang berjalan untuk memutar arsip, FTP, dan Usenet.</string>
     <string name="stremio_service_required">Konfigurasikan Stremio Service.</string>
     <string name="stremio_service_save">Simpan</string>
+    <string name="stremio_sync_skipped_items">Item pustaka yang dilewati: %1$d. Pasang add-on yang mendukungnya, lalu sinkronkan lagi.</string>
+    <string name="stremio_error_library_too_large">Pustaka Stremio Anda terlalu besar untuk disinkronkan. Maksimum: %1$d.</string>
+    <string name="stremio_error_sign_in_expired">Masuk Stremio telah kedaluwarsa. Putuskan sambungan, lalu sambungkan lagi.</string>
 </resources>

@@ -28,6 +28,7 @@ class StremioAccountServiceTest {
     private var collection=JsonArray()
     private var uploadFailure=false
     private var privateMode=false
+    private var sessionExpired=false
     private var accountId="account-one"
     private val uploaded=mutableListOf<JsonObject>()
     private lateinit var service:StremioAccountService
@@ -60,7 +61,8 @@ class StremioAccountServiceTest {
                     "create" -> ok(jsonObject("code" to "device-code","link" to "https://link.stremio.com/?code=device-code"))
                     "read" -> ok(jsonObject("authKey" to "transfer-token"))
                     "loginWithToken" -> ok(jsonObject("authKey" to "own-token","user" to jsonObject("_id" to accountId,"email" to "fixture@example.test")))
-                    "addonCollectionGet" -> ok(jsonObject("addons" to collection))
+                    "addonCollectionGet" -> if(sessionExpired) MockResponse().setBody(jsonObject("error" to
+                        jsonObject("code" to 1,"message" to "Session does not exist")).toString()) else ok(jsonObject("addons" to collection))
                     "datastoreGet" -> ok(cloud)
                     "datastorePut" -> {
                         val body=JsonParser.parseString(request.body.readUtf8()).asJsonObject
@@ -138,25 +140,61 @@ class StremioAccountServiceTest {
         addonFlow.value=listOf(addon,addon.copy(id=2,installUrl="https://other.test/manifest.json"))
         session();cloud.add(jsonObject("_id" to "custom:1","type" to "movie","name" to "Custom",
             "state" to jsonObject("video_id" to "custom:1","timeOffset" to 12_000)))
-        assertFalse(service.sync())
+        assertTrue(service.sync())
         assertTrue(history.value.isEmpty())
         assertTrue(addonFlow.value.all { it.catalogSettings.isEmpty() })
+        assertEquals(1,service.state.value.skippedItems)
+        assertNull(service.state.value.error)
     }
-    @Test fun partialImportRetriesOnlyUnfinishedItemsAndDoesNotRecordSuccess()=runBlocking {
+    @Test fun unresolvableItemsAreSkippedAndRetriedWithoutFailingTheSync()=runBlocking {
         session()
         cloud.add(cloudMovie())
         cloud.add(jsonObject("_id" to "custom:1","type" to "movie","name" to "Custom"))
         val second=addon.copy(id=2,installUrl="https://other.test/manifest.json")
         addonFlow.value=listOf(addon,second)
-        assertFalse(service.sync())
-        assertEquals(0L,store.value.number("lastSyncAt"))
+        assertTrue(service.sync())
+        assertEquals(now,store.value.number("lastSyncAt"))
+        assertEquals(1,service.state.value.skippedItems)
+        assertNull(service.state.value.error)
         assertTrue(store.value.getAsJsonObject("importing").has("custom:1"))
         assertFalse(store.value.getAsJsonObject("importing").has("tt123"))
         addonFlow.value=addonFlow.value.filter { it.id==addon.id }
         assertTrue(service.sync())
         assertFalse(store.value.getAsJsonObject("importing").has("custom:1"))
-        assertEquals(now,store.value.number("lastSyncAt"))
+        assertEquals(0,service.state.value.skippedItems)
         assertTrue(uploaded.isEmpty())
+    }
+    @Test fun nonImdbIdsWithoutAMetadataAddonDoNotBlockImdbImports()=runBlocking {
+        // Issue #328: tmdb:/URL IDs when only an IMDb-only (tt prefix) metadata add-on is installed.
+        whenever(addons.getManifest(any())).thenReturn(StremioManifest("fixture","Fixture","1",
+            resources=listOf(StremioManifestResource(StremioResourceKind.META,idPrefixes=listOf("tt")))))
+        session()
+        cloud.add(cloudMovie())
+        cloud.add(jsonObject("_id" to "tmdb:42","type" to "movie","name" to "Tmdb"))
+        cloud.add(jsonObject("_id" to "https://example.test/video","type" to "movie","name" to "Url"))
+        assertTrue(service.sync())
+        assertEquals(40_000L,history.value.single().resumePositionMs)
+        assertEquals(2,service.state.value.skippedItems)
+        assertNull(service.state.value.error)
+    }
+    @Test fun manifestsAreReadOncePerSyncNotPerItem()=runBlocking {
+        session()
+        repeat(50) { i -> cloud.add(jsonObject("_id" to "tt${i+1}","type" to "movie","name" to "Movie")) }
+        assertTrue(service.sync())
+        verify(addons, times(1)).getManifest(any());Unit
+    }
+    @Test fun rejectedSessionReportsSessionExpired()=runBlocking {
+        session();sessionExpired=true
+        assertFalse(service.sync())
+        assertEquals(StremioAccountError.SESSION_EXPIRED,service.state.value.error)
+        assertTrue(service.state.value.connected)
+    }
+    @Test fun oversizedLibraryReportsADistinctError()=runBlocking {
+        session()
+        repeat(5001) { i -> cloud.add(jsonObject("_id" to "tt${i+1}","type" to "movie")) }
+        assertFalse(service.sync())
+        assertEquals(StremioAccountError.LIBRARY_TOO_LARGE,service.state.value.error)
+        assertTrue(history.value.isEmpty())
     }
     @Test fun largeImportRebuildsLocalSnapshotPerBatch()=runBlocking {
         session()

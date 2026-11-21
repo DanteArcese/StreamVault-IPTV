@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">Conectați un Stremio Service pornit pentru a reda arhive, FTP și Usenet.</string>
     <string name="stremio_service_required">Configurați Stremio Service.</string>
     <string name="stremio_service_save">Salvează</string>
+    <string name="stremio_sync_skipped_items">Elemente din bibliotecă omise: %1$d. Instalează un supliment care le acceptă, apoi sincronizează din nou.</string>
+    <string name="stremio_error_library_too_large">Biblioteca ta Stremio este prea mare pentru sincronizare. Maxim: %1$d.</string>
+    <string name="stremio_error_sign_in_expired">Autentificarea în Stremio a expirat. Deconectează-te, apoi conectează-te din nou.</string>
 </resources>

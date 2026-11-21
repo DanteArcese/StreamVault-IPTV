@@ -157,4 +157,7 @@
     <string name="stremio_streaming_service_description">Verbind een actieve Stremio Service om archieven, FTP en Usenet af te spelen.</string>
     <string name="stremio_service_required">Configureer Stremio Service.</string>
     <string name="stremio_service_save">Opslaan</string>
+    <string name="stremio_sync_skipped_items">Overgeslagen bibliotheekitems: %1$d. Installeer een add-on die ze ondersteunt en synchroniseer opnieuw.</string>
+    <string name="stremio_error_library_too_large">Je Stremio-bibliotheek is te groot om te synchroniseren. Maximum: %1$d.</string>
+    <string name="stremio_error_sign_in_expired">Stremio-aanmelding is verlopen. Verbreek de verbinding en maak opnieuw verbinding.</string>
 </resources>
