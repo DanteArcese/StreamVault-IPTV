@@ -26,3 +26,15 @@ typealias CatalogDashboardShelfCustomizationContent = @Composable (
     onDismiss: () -> Unit,
     onSave: (List<AppHomeDashboardShelf>) -> Unit,
 ) -> Unit
+
+/**
+ * App-supplied Stremio add-on content for Catalog screens (issue #326). The Catalog feature never
+ * depends on the Stremio feature; each slot renders nothing when Stremio content is hidden or no
+ * enabled add-on catalog matches.
+ */
+class CatalogStremioContent(
+    val movieShelves: @Composable () -> Unit = {},
+    val seriesShelves: @Composable () -> Unit = {},
+    val searchResults: @Composable (query: String, includeMovies: Boolean, includeSeries: Boolean) -> Unit =
+        { _, _, _ -> },
+)
